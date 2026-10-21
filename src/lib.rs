@@ -284,6 +284,32 @@ impl PhysicalBounds {
     }
 }
 
+impl ops::Add<PhysicalPosition> for PhysicalBounds {
+    type Output = PhysicalBounds;
+
+    fn add(self, other: PhysicalPosition) -> Self::Output {
+        PhysicalBounds::lrtb(
+            self.left + other.x,
+            self.right + other.x,
+            self.top + other.y,
+            self.bottom + other.y,
+        )
+    }
+}
+
+impl ops::Sub<PhysicalPosition> for PhysicalBounds {
+    type Output = PhysicalBounds;
+
+    fn sub(self, other: PhysicalPosition) -> Self::Output {
+        PhysicalBounds::lrtb(
+            self.left - other.x,
+            self.right - other.x,
+            self.top - other.y,
+            self.bottom - other.y,
+        )
+    }
+}
+
 #[derive(Debug, Clone, Copy, PartialEq)]
 #[repr(C)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
@@ -321,6 +347,32 @@ impl LogicalBounds {
     #[must_use]
     pub fn to_physical(&self, scale_factor: f64) -> PhysicalBounds {
         PhysicalBounds::from_logical(self, scale_factor)
+    }
+}
+
+impl ops::Add<LogicalPosition> for LogicalBounds {
+    type Output = LogicalBounds;
+
+    fn add(self, other: LogicalPosition) -> Self::Output {
+        LogicalBounds::lrtb(
+            self.left + other.x,
+            self.right + other.x,
+            self.top + other.y,
+            self.bottom + other.y,
+        )
+    }
+}
+
+impl ops::Sub<LogicalPosition> for LogicalBounds {
+    type Output = LogicalBounds;
+
+    fn sub(self, other: LogicalPosition) -> Self::Output {
+        LogicalBounds::lrtb(
+            self.left - other.x,
+            self.right - other.x,
+            self.top - other.y,
+            self.bottom - other.y,
+        )
     }
 }
 
