@@ -1,3 +1,5 @@
+use std::ops;
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[repr(C)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
@@ -26,6 +28,36 @@ impl PhysicalSize {
     #[must_use]
     pub fn to_logical(&self, scale_factor: f64) -> LogicalSize {
         LogicalSize::from_physical(self, scale_factor)
+    }
+}
+
+impl ops::Add<PhysicalSize> for PhysicalSize {
+    type Output = PhysicalSize;
+
+    fn add(self, other: PhysicalSize) -> PhysicalSize {
+        PhysicalSize::new(self.width + other.width, self.height + other.height)
+    }
+}
+
+impl ops::AddAssign for PhysicalSize {
+    fn add_assign(&mut self, other: Self) {
+        self.width += other.width;
+        self.height += other.height;
+    }
+}
+
+impl ops::Sub<PhysicalSize> for PhysicalSize {
+    type Output = PhysicalSize;
+
+    fn sub(self, other: PhysicalSize) -> Self::Output {
+        PhysicalSize::new(self.width - other.width, self.height - other.height)
+    }
+}
+
+impl ops::SubAssign for PhysicalSize {
+    fn sub_assign(&mut self, other: Self) {
+        self.width -= other.width;
+        self.height -= other.height;
     }
 }
 
@@ -60,6 +92,36 @@ impl LogicalSize {
     }
 }
 
+impl ops::Add<LogicalSize> for LogicalSize {
+    type Output = LogicalSize;
+
+    fn add(self, other: LogicalSize) -> LogicalSize {
+        LogicalSize::new(self.width + other.width, self.height + other.height)
+    }
+}
+
+impl ops::AddAssign for LogicalSize {
+    fn add_assign(&mut self, other: Self) {
+        self.width += other.width;
+        self.height += other.height;
+    }
+}
+
+impl ops::Sub<LogicalSize> for LogicalSize {
+    type Output = LogicalSize;
+
+    fn sub(self, other: LogicalSize) -> Self::Output {
+        LogicalSize::new(self.width - other.width, self.height - other.height)
+    }
+}
+
+impl ops::SubAssign for LogicalSize {
+    fn sub_assign(&mut self, other: Self) {
+        self.width -= other.width;
+        self.height -= other.height;
+    }
+}
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[repr(C)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
@@ -91,6 +153,36 @@ impl PhysicalPosition {
     }
 }
 
+impl ops::Add<PhysicalPosition> for PhysicalPosition {
+    type Output = PhysicalPosition;
+
+    fn add(self, other: PhysicalPosition) -> PhysicalPosition {
+        PhysicalPosition::new(self.x + other.x, self.y + other.y)
+    }
+}
+
+impl ops::AddAssign for PhysicalPosition {
+    fn add_assign(&mut self, other: Self) {
+        self.x += other.x;
+        self.y += other.y;
+    }
+}
+
+impl ops::Sub<PhysicalPosition> for PhysicalPosition {
+    type Output = PhysicalPosition;
+
+    fn sub(self, other: PhysicalPosition) -> Self::Output {
+        PhysicalPosition::new(self.x - other.x, self.y - other.y)
+    }
+}
+
+impl ops::SubAssign for PhysicalPosition {
+    fn sub_assign(&mut self, other: Self) {
+        self.x -= other.x;
+        self.y -= other.y;
+    }
+}
+
 #[derive(Debug, Clone, Copy, PartialEq)]
 #[repr(C)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
@@ -119,6 +211,36 @@ impl LogicalPosition {
     #[must_use]
     pub fn to_physical(&self, scale_factor: f64) -> PhysicalPosition {
         PhysicalPosition::from_logical(self, scale_factor)
+    }
+}
+
+impl ops::Add<LogicalPosition> for LogicalPosition {
+    type Output = LogicalPosition;
+
+    fn add(self, other: LogicalPosition) -> LogicalPosition {
+        LogicalPosition::new(self.x + other.x, self.y + other.y)
+    }
+}
+
+impl ops::AddAssign for LogicalPosition {
+    fn add_assign(&mut self, other: Self) {
+        self.x += other.x;
+        self.y += other.y;
+    }
+}
+
+impl ops::Sub<LogicalPosition> for LogicalPosition {
+    type Output = LogicalPosition;
+
+    fn sub(self, other: LogicalPosition) -> Self::Output {
+        LogicalPosition::new(self.x - other.x, self.y - other.y)
+    }
+}
+
+impl ops::SubAssign for LogicalPosition {
+    fn sub_assign(&mut self, other: Self) {
+        self.x -= other.x;
+        self.y -= other.y;
     }
 }
 
@@ -279,6 +401,22 @@ impl PhysicalRect {
     }
 }
 
+impl ops::Add<PhysicalPosition> for PhysicalRect {
+    type Output = PhysicalRect;
+
+    fn add(self, other: PhysicalPosition) -> Self::Output {
+        PhysicalRect::new(self.x + other.x, self.y + other.y, self.width, self.height)
+    }
+}
+
+impl ops::Sub<PhysicalPosition> for PhysicalRect {
+    type Output = PhysicalRect;
+
+    fn sub(self, other: PhysicalPosition) -> Self::Output {
+        PhysicalRect::new(self.x - other.x, self.y - other.y, self.width, self.height)
+    }
+}
+
 #[derive(Debug, Clone, Copy, PartialEq)]
 #[repr(C)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
@@ -348,5 +486,21 @@ impl LogicalRect {
     #[must_use]
     pub fn to_physical(&self, scale_factor: f64) -> PhysicalRect {
         PhysicalRect::from_logical(self, scale_factor)
+    }
+}
+
+impl ops::Add<LogicalPosition> for LogicalRect {
+    type Output = LogicalRect;
+
+    fn add(self, other: LogicalPosition) -> Self::Output {
+        LogicalRect::new(self.x + other.x, self.y + other.y, self.width, self.height)
+    }
+}
+
+impl ops::Sub<LogicalPosition> for LogicalRect {
+    type Output = LogicalRect;
+
+    fn sub(self, other: LogicalPosition) -> Self::Output {
+        LogicalRect::new(self.x - other.x, self.y - other.y, self.width, self.height)
     }
 }
