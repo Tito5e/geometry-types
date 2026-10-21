@@ -215,7 +215,7 @@ pub struct PhysicalRect {
 impl PhysicalRect {
     #[inline]
     #[must_use]
-    pub fn lrtb(x: i32, y: i32, width: u32, height: u32) -> Self {
+    pub fn new(x: i32, y: i32, width: u32, height: u32) -> Self {
         Self {
             x,
             y,
@@ -226,8 +226,45 @@ impl PhysicalRect {
 
     #[inline]
     #[must_use]
+    pub fn is_empty(&self) -> bool {
+        !(self.width > 0 && self.height > 0)
+    }
+
+    #[inline]
+    #[must_use]
+    pub fn intersects(&self, other: &PhysicalRect) -> bool {
+        !self.is_empty()
+            && !other.is_empty()
+            && self.x < other.x + other.width as i32
+            && other.x < self.x + self.width as i32
+            && self.y < other.y + other.height as i32
+            && other.y < self.y + self.height as i32
+    }
+
+    #[inline]
+    #[must_use]
+    pub fn intersect(&self, other: &PhysicalRect) -> Option<PhysicalRect> {
+        let x = self.x.max(other.x);
+        let y = self.y.max(other.y);
+        let right = (self.x + self.width as i32).min(other.x + other.width as i32);
+        let bottom = (self.y + self.height as i32).min(other.y + other.height as i32);
+
+        if right > x && bottom > y {
+            Some(PhysicalRect::new(
+                x,
+                y,
+                (right - x) as u32,
+                (bottom - y) as u32,
+            ))
+        } else {
+            None
+        }
+    }
+
+    #[inline]
+    #[must_use]
     pub fn from_logical(other: &LogicalRect, scale_factor: f64) -> Self {
-        Self::lrtb(
+        Self::new(
             (other.x as f64 * scale_factor) as _,
             (other.y as f64 * scale_factor) as _,
             (other.width as f64 * scale_factor) as _,
@@ -255,7 +292,7 @@ pub struct LogicalRect {
 impl LogicalRect {
     #[inline]
     #[must_use]
-    pub fn lrtb(x: f32, y: f32, width: f32, height: f32) -> Self {
+    pub fn new(x: f32, y: f32, width: f32, height: f32) -> Self {
         Self {
             x,
             y,
@@ -266,8 +303,40 @@ impl LogicalRect {
 
     #[inline]
     #[must_use]
+    pub fn is_empty(&self) -> bool {
+        !(self.width > 0. && self.height > 0.)
+    }
+
+    #[inline]
+    #[must_use]
+    pub fn intersects(&self, other: &LogicalRect) -> bool {
+        !self.is_empty()
+            && !other.is_empty()
+            && self.x < other.x + other.width
+            && other.x < self.x + self.width
+            && self.y < other.y + other.height
+            && other.y < self.y + self.height
+    }
+
+    #[inline]
+    #[must_use]
+    pub fn intersect(&self, other: &LogicalRect) -> Option<LogicalRect> {
+        let x = self.x.max(other.x);
+        let y = self.y.max(other.y);
+        let right = (self.x + self.width).min(other.x + other.width);
+        let bottom = (self.y + self.height).min(other.y + other.height);
+
+        if right > x && bottom > y {
+            Some(LogicalRect::new(x, y, right - x, bottom - y))
+        } else {
+            None
+        }
+    }
+
+    #[inline]
+    #[must_use]
     pub fn from_physical(other: &PhysicalRect, scale_factor: f64) -> Self {
-        Self::lrtb(
+        Self::new(
             (other.x as f64 / scale_factor) as _,
             (other.y as f64 / scale_factor) as _,
             (other.width as f64 / scale_factor) as _,
