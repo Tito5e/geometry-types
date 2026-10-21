@@ -1,5 +1,6 @@
 [package]
 name = "geometry-types"
+description = "simple geometry collections for 2d graphics"
 version = "0.1.0"
 edition = "2024"
 authors = ["Akisaki Titose <contact@titose.dev>"]
