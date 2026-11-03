@@ -40,6 +40,18 @@ impl PhysicalBounds {
     pub fn to_logical(&self, scale_factor: f64) -> LogicalBounds {
         LogicalBounds::from_physical(self, scale_factor)
     }
+
+    #[inline]
+    #[must_use]
+    pub fn width(&self) -> i32 {
+        self.right - self.left
+    }
+
+    #[inline]
+    #[must_use]
+    pub fn height(&self) -> i32 {
+        self.bottom - self.top
+    }
 }
 
 impl ops::Add<PhysicalPosition> for PhysicalBounds {
@@ -105,6 +117,18 @@ impl LogicalBounds {
     #[must_use]
     pub fn to_physical(&self, scale_factor: f64) -> PhysicalBounds {
         PhysicalBounds::from_logical(self, scale_factor)
+    }
+
+    #[inline]
+    #[must_use]
+    pub fn width(&self) -> f32 {
+        self.right - self.left
+    }
+
+    #[inline]
+    #[must_use]
+    pub fn height(&self) -> f32 {
+        self.bottom - self.top
     }
 }
 
