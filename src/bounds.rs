@@ -52,6 +52,15 @@ impl PhysicalBounds {
     pub fn height(&self) -> i32 {
         self.bottom - self.top
     }
+
+    #[inline]
+    #[must_use]
+    pub const fn intersects(&self, other: &PhysicalBounds) -> bool {
+        (self.left < other.right)
+            & (other.left < self.right)
+            & (self.top < other.bottom)
+            & (other.top < self.bottom)
+    }
 }
 
 impl ops::Add<PhysicalPosition> for PhysicalBounds {
@@ -129,6 +138,15 @@ impl LogicalBounds {
     #[must_use]
     pub fn height(&self) -> f32 {
         self.bottom - self.top
+    }
+
+    #[inline]
+    #[must_use]
+    pub const fn intersects(&self, other: &LogicalBounds) -> bool {
+        (self.left < other.right)
+            & (other.left < self.right)
+            & (self.top < other.bottom)
+            & (other.top < self.bottom)
     }
 }
 

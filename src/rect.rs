@@ -34,11 +34,11 @@ impl PhysicalRect {
     #[must_use]
     pub fn intersects(&self, other: &PhysicalRect) -> bool {
         !self.is_empty()
-            && !other.is_empty()
-            && self.x < other.x + other.width as i32
-            && other.x < self.x + self.width as i32
-            && self.y < other.y + other.height as i32
-            && other.y < self.y + self.height as i32
+            & !other.is_empty()
+            & (self.x < other.x + other.width as i32)
+            & (other.x < self.x + self.width as i32)
+            & (self.y < other.y + other.height as i32)
+            & (other.y < self.y + self.height as i32)
     }
 
     #[inline]
@@ -153,11 +153,11 @@ impl LogicalRect {
     #[must_use]
     pub fn intersects(&self, other: &LogicalRect) -> bool {
         !self.is_empty()
-            && !other.is_empty()
-            && self.x < other.x + other.width
-            && other.x < self.x + self.width
-            && self.y < other.y + other.height
-            && other.y < self.y + self.height
+            & !other.is_empty()
+            & (self.x < other.x + other.width)
+            & (other.x < self.x + self.width)
+            & (self.y < other.y + other.height)
+            & (other.y < self.y + self.height)
     }
 
     #[inline]
