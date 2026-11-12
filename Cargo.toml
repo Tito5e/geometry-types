@@ -1,13 +1,15 @@
 [package]
 name = "geometry-types"
 description = "simple geometry collections for 2d graphics"
-version = "0.7.0"
+version = "0.8.0"
 edition = "2024"
 authors = ["Akisaki Titose <contact@titose.dev>"]
 license = "MIT OR Apache-2.0"
 
 [dependencies]
+bytemuck = { version = "1.25.2", features = ["derive"], optional = true }
 serde = { version = "1.0.229", optional = true, features = ["derive"] }
 
 [features]
 serde = ["dep:serde"]
+bytemuck = ["dep:bytemuck"]
